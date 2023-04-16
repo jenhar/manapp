@@ -12,6 +12,7 @@ from module.analytics_module import gdf_loc, catchment
 from module.visualization_module import teritory_chart, teritory_map, poi_chart, poi_map, ses_chart, ses_map, demog_chart_all, demog_chart_perdesa, demog_chart_spesific, demog_map_all, demog_map_general, demog_map_per_desa, demog_map_spesific, mw_chart_heatmap, mw_chart_hours, mw_chart_segmenttime, mw_chart_timeseries, mw_chart_weekdays
 
 import pydeck as pdk
+from pathlib import Path
 
 # Global Variables
 theme_plotly = None  # None or streamlit
@@ -42,12 +43,12 @@ list_female = ['PR_15_19', 'PR_20_24', 'PR_25_29', 'PR_30_34',
 list_variable = list_male+list_female
 
 data = fetchData(
-    './data/df_poi.geojson',
-    './data/df_poi_atm.geojson',
-    './data/df_demografi.geojson',
-    './data/df_ses.geojson',
-    './data/df_mw.parquet',
-    './data/df_grid.geojson',
+    Path(__file__).parents[1]/'data/df_poi.geojson',
+    Path(__file__).parents[1]/'data/df_poi_atm.geojson',
+    Path(__file__).parents[1]/'data/df_demografi.geojson',
+    Path(__file__).parents[1]/'data/df_ses.geojson',
+    Path(__file__).parents[1]/'data/df_mw.parquet',
+    Path(__file__).parents[1]/'data/df_grid.geojson',
     list_variable
 )
 
@@ -156,9 +157,9 @@ with tab5:
 
     @st.cache_data
     def getData():
-        grid = gpd.read_file("./data/grid.geojson").astype({'time': 'str'})
-        line = gpd.read_file("./data/line.geojson").astype({'time': 'str'})
-        point = gpd.read_file("./data/point.geojson")
+        grid = gpd.read_file(Path(__file__).parents[1]/"data/grid.geojson").astype({'time': 'str'})
+        line = gpd.read_file(Path(__file__).parents[1]/"data/line.geojson").astype({'time': 'str'})
+        point = gpd.read_file(Path(__file__).parents[1]/"data/point.geojson")
         point['coordinates'] = point['geometry'].apply(lambda x: [x.x, x.y])
         point['radius'] = point['ratio'].apply(lambda x: x*100)
         return grid, line, point

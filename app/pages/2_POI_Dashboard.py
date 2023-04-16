@@ -75,7 +75,7 @@ catch = catchment(loc, 2000)
 
 @ st.cache_data
 def getData():
-    data = gpd.read_file(Path(__file__).parents[1]/"app/data/mandiri_category.geojson")
+    data = gpd.read_file(Path(__file__).parents[1]/"data/mandiri_category.geojson")
     return data
 
 
@@ -99,7 +99,7 @@ if st.session_state['analyticsType'] == 'Merchant':
     #     ('Group', 'Category'))
 
     if (branch == 'Mandiri Cabang Keramatjati'):
-        df1 = pd.read_excel('app/data/keramatjati_merchant.xls', 'sheet1')
+        df1 = pd.read_excel(Path(__file__).parents[1]/'data/keramatjati_merchant.xls', 'sheet1')
 
     else:
         df1 = pd.read_excel('./data/pik_merchant.xls', 'sheet1')
@@ -109,10 +109,10 @@ if st.session_state['analyticsType'] == 'Postal Code':
     st.session_state['filterMode'] = 'Group'
 
     if (branch == 'Mandiri Cabang Keramatjati'):
-        df1 = pd.read_excel(Path(__file__).parents[1]/'app/data/keramatjati_kodepodes.xls', 'sheet1')
+        df1 = pd.read_excel(Path(__file__).parents[1]/'data/keramatjati_kodepodes.xls', 'sheet1')
 
     else:
-        df1 = pd.read_excel(Path(__file__).parents[1]/'app/data/pik_kodepodes.xls', 'sheet1')
+        df1 = pd.read_excel(Path(__file__).parents[1]/'data/pik_kodepodes.xls', 'sheet1')
 
 df1['geom'] = [creategeom(x) for x in df1['lonlat']]
 df1 = setgeom(df1)
@@ -220,7 +220,7 @@ def get_icon_color(value):
 
 
 def get_icon_url(subkategori):
-    base_url = Path(__file__).parents[1]/'app/data/assets/poi_icon/'
+    base_url = Path(__file__).parents[1]/'data/assets/poi_icon/'
     icon_name = str(subkategori).split(" ")
     icon_name = '_'.join(icon_name)
     icon_url = f"{base_url}{icon_name}.png"
@@ -302,7 +302,7 @@ def iterateMap(map, data):
             marker.add_to(map)
 
 
-loc_icon_url = Path(__file__).parents[1]/"app/data/assets/poi_icon/marker-mandiri.png"
+loc_icon_url = Path(__file__).parents[1]/"data/assets/poi_icon/marker-mandiri.png"
 loc_icon = folium.features.CustomIcon(loc_icon_url, icon_size=(48, 48))
 loc_marker = folium.Marker([st.session_state['center_lat'],
                             st.session_state['center_lon']], icon=loc_icon).add_to(map)
