@@ -4,7 +4,7 @@ from PIL import Image
 
 from module.fetch_module import fetchData
 
-image = Image.open('./data/assets/iconmap/mandiri-logo.png')
+image = Image.open('/data/assets/iconmap/mandiri-logo.png')
 st.image(image, width=300)
 
 st.title('BUSINESS CASE TRIAL INTELLIGENT BUSINESS ECOSYSTEM')
