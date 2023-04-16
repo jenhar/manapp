@@ -460,7 +460,7 @@ if len(st.session_state['selected_rows']) > 0:
     st.table(dfinalFilter)
 
 
-with open('style.css')as f:
+with open(Path(__file__).parents[1]/'style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 make_map_responsive = """
  <style>
