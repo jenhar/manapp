@@ -74,7 +74,7 @@ catch = catchment(loc, 2000)
 
 @ st.cache_data
 def getData():
-    data = gpd.read_file("/data/mandiri_category.geojson")
+    data = gpd.read_file("./data/mandiri_category.geojson")
     return data
 
 
@@ -98,20 +98,20 @@ if st.session_state['analyticsType'] == 'Merchant':
     #     ('Group', 'Category'))
 
     if (branch == 'Mandiri Cabang Keramatjati'):
-        df1 = pd.read_excel('/data/keramatjati_merchant.xls', 'sheet1')
+        df1 = pd.read_excel('./data/keramatjati_merchant.xls', 'sheet1')
 
     else:
-        df1 = pd.read_excel('/data/pik_merchant.xls', 'sheet1')
+        df1 = pd.read_excel('./data/pik_merchant.xls', 'sheet1')
 
     #st.session_state['filterMode'] = filterMode
 if st.session_state['analyticsType'] == 'Postal Code':
     st.session_state['filterMode'] = 'Group'
 
     if (branch == 'Mandiri Cabang Keramatjati'):
-        df1 = pd.read_excel('/data/keramatjati_kodepodes.xls', 'sheet1')
+        df1 = pd.read_excel('./data/keramatjati_kodepodes.xls', 'sheet1')
 
     else:
-        df1 = pd.read_excel('/data/pik_kodepodes.xls', 'sheet1')
+        df1 = pd.read_excel('./data/pik_kodepodes.xls', 'sheet1')
 
 df1['geom'] = [creategeom(x) for x in df1['lonlat']]
 df1 = setgeom(df1)

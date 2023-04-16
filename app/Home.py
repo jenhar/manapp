@@ -1,10 +1,11 @@
 # Libraries
 import streamlit as st
 from PIL import Image
+from pathlib import Path
 
 from module.fetch_module import fetchData
 
-image = Image.open('data/assets/iconmap/mandiri-logo.png')
+image = Image.open(Path(__file__).parents[1]/'data/assets/iconmap/mandiri-logo.png')
 st.image(image, width=300)
 
 st.title('BUSINESS CASE TRIAL INTELLIGENT BUSINESS ECOSYSTEM')
