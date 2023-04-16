@@ -74,7 +74,7 @@ catch = catchment(loc, 2000)
 
 @ st.cache_data
 def getData():
-    data = gpd.read_file("./data/mandiri_category.geojson")
+    data = gpd.read_file("/data/mandiri_category.geojson")
     return data
 
 
