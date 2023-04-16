@@ -307,7 +307,7 @@ loc_icon_url = Path(__file__).parents[1]/"data/assets/poi_icon/marker-mandiri.pn
 encoded = base64.b64encode(open(loc_icon_url).read())
 decoded = base64.b64decode(encoded)
 loc_icon_url = BytesIO(decoded)
-loc_icon = folium.features.CustomIcon(loc_icon_url, icon_size=(48, 48))
+loc_icon = folium.features.CustomIcon(encoded, icon_size=(48, 48))
 loc_marker = folium.Marker([st.session_state['center_lat'],
                             st.session_state['center_lon']], icon=loc_icon).add_to(map)
 
