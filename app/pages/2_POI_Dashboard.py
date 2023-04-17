@@ -307,7 +307,7 @@ def iterateMap(map, data):
 #loc_icon_url= Image.open(loc_icon_url)
 #loc_icon = folium.features.CustomIcon(loc_icon_url, icon_size=(48, 48))
 loc_marker = folium.Marker([st.session_state['center_lat'],
-                            st.session_state['center_lon']], icon=folium.Icon(color='red',icon='info-sign')).add_to(map)
+                            st.session_state['center_lon']], icon=folium.Icon(color='blue',icon='info-sign')).add_to(map)
 
 CatchLayer = folium.GeoJson(data=catch)
 # Add GeoJson layer to map
