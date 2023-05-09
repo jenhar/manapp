@@ -1,6 +1,6 @@
 #from typing import OrderedDict
 from module.whitespace_distance import nearestdistances, creategeom, setgeom, setlonlat, nlp_value, mandiri_score, spatial_score, categori_type
-from module.whitespace_distance import nearestdistances, creategeom, setgeom, setlonlat, nlp_value
+from module.mandiri_parameter import *
 #from tkinter.tix import COLUMN
 #from turtle import width
 import streamlit as st
@@ -121,13 +121,15 @@ df1.crs=catch.crs
 df1 = gpd.sjoin(df1, catch[['id', 'geometry']])
 df1 = df1.reset_index(drop=True)
 d1 = spatial_score(data)
-df1 = mandiri_score(df1)
+#df1 = mandiri_score(df1)
+mandiri_new_parameter(df1)
+mandiri_new_socre(df1)
+
 df = nearestdistances(df1, d1, 100)
 df = df.rename(columns={'geom': 'geometry'})
 d11 = d1[~d1.index.isin(df['name_y'].values.tolist())]
 nlp_value(df, 'name_x', 'poi_name')
-m = df[['buc', 'branch', 'is_deposit', 'is_giro', 'is_tabungan', 'flag_mcm1', 'flag_mcm2', 'flag_mgt', 'flag_mib',
-        'flag_scm', 'online_using_rate', 'name_x', 'poi_name', 'nlp_score', 'mandiri_score', 'spatial_score', 'geometry']]
+m = df[['buc', 'branch','transaction_credit','balance_casa_to_credit','transaction_debit','balance','closeloop_rate_transaction','other_bank_rate','online_using_rate_sc' ,'name_x', 'poi_name', 'nlp_score', 'mandiri_score', 'spatial_score', 'geometry']]
 b = d11[['poi_name', 'spatial_score', 'geometry']]
 dfinal = pd.concat([m, b]).reset_index(drop=True)
 dfinal = dfinal.fillna(0)
@@ -235,7 +237,6 @@ popup_style = '''
     <p style="color:black;">NLP score: {nlp_score}</p>
     <p style="color:black;">Mandiri score: {mandiri_score}</p>
     <p style="color:black;">Spatial score: {spatial_score}</p>
-    <p style="color:black;">Online Using Rate: {online_using_rate}</p>
 '''
 
 
@@ -259,7 +260,7 @@ def iterateMap(map, data):
                 nlp_score=row['nlp_score'],
                 mandiri_score=row['mandiri_score'],
                 spatial_score=row['spatial_score'],
-                online_using_rate=row['online_using_rate'],
+                #online_using_rate=row['online_using_rate'],
             )
             marker = folium.Marker(
                 [row.geometry.y, row.geometry.x],
@@ -276,7 +277,6 @@ def iterateMap(map, data):
                 nlp_score=row['nlp_score'],
                 mandiri_score=row['mandiri_score'],
                 spatial_score=row['spatial_score'],
-                online_using_rate=row['online_using_rate'],
             )
             marker = folium.Marker(
                 [row.geometry.y, row.geometry.x],
@@ -293,7 +293,7 @@ def iterateMap(map, data):
                 nlp_score=row['nlp_score'],
                 mandiri_score=row['mandiri_score'],
                 spatial_score=row['spatial_score'],
-                online_using_rate=row['online_using_rate'],
+                #online_using_rate=row['online_using_rate'],
             )
             marker = folium.Marker(
                 [row.geometry.y, row.geometry.x],
@@ -365,7 +365,7 @@ def get_percent(value):
 colTable, colMap = st.columns(2)
 # field = ['type', 'name_x', 'poi_name', 'nlp_score', 'mandiri_score', 'spatial_score', 'online_using_rate', 'buc', 'branch', 'is_deposit', 'is_giro', 'is_tabungan', 'flag_mcm1', 'flag_mcm2', 'flag_mgt', 'flag_mib', 'flag_scm']
 field = ['no', 'type', 'name', 'poi_name', 'nlp_score', 'mandiri_score',
-         'spatial_score', 'online_using_rate']
+         'spatial_score']
 with colTable:
     selectType = st.selectbox(
         'Please Select Customer Type',
@@ -445,19 +445,17 @@ if len(st.session_state['selected_rows']) > 0:
     dfinalFilter = dfinalFilter[dfinalFilter['no'].isin(
         list(st.session_state['selected_rows']['no']))]
     
+    '','','','','','',''
 
-    dfinalFilter['is_giro'] = dfinalFilter['is_giro'].apply(get_icon_table)
-    dfinalFilter['is_deposit'] = dfinalFilter['is_deposit'].apply(
-        get_icon_table)
-    dfinalFilter['is_tabungan'] = dfinalFilter['is_tabungan'].apply(
-        get_icon_table)
-    dfinalFilter['flag_mcm1'] = dfinalFilter['flag_mcm1'].apply(get_icon_table)
-    dfinalFilter['flag_mcm2'] = dfinalFilter['flag_mcm2'].apply(get_icon_table)
-    dfinalFilter['flag_mgt'] = dfinalFilter['flag_mgt'].apply(get_icon_table)
-    dfinalFilter['flag_mib'] = dfinalFilter['flag_mib'].apply(get_icon_table)
-    dfinalFilter['flag_scm'] = dfinalFilter['flag_scm'].apply(get_icon_table)
-    dfinalFilter['online_using_rate'] = dfinalFilter['online_using_rate'].apply(
-        get_percent)
+    dfinalFilter['transaction_credit'] = dfinalFilter['transaction_credit'].apply(get_icon_table)
+    dfinalFilter['balance_casa_to_credit'] = dfinalFilter['balance_casa_to_credit'].apply(get_icon_table)
+    dfinalFilter['transaction_debit'] = dfinalFilter['transaction_debit'].apply(get_icon_table)
+    dfinalFilter['balance'] = dfinalFilter['balance'].apply(get_icon_table)
+    dfinalFilter['closeloop_rate_transaction'] = dfinalFilter['closeloop_rate_transaction'].apply(get_icon_table)
+    dfinalFilter['other_bank_rate'] = dfinalFilter['other_bank_rate'].apply(get_icon_table)
+    dfinalFilter['online_using_rate_sc'] = dfinalFilter['online_using_rate_sc'].apply(get_icon_table)
+    #dfinalFilter['flag_scm'] = dfinalFilter['flag_scm'].apply(get_icon_table)
+    #dfinalFilter['online_using_rate'] = dfinalFilter['online_using_rate'].apply(get_percent)
     dfinalFilter = dfinalFilter.reset_index(drop=True)
     st.table(dfinalFilter)
 

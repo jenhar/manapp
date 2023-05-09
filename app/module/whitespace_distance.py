@@ -93,13 +93,10 @@ def setgeom(df1):
     df1.set_crs = 'epsg:4326'
     return df1
 
-
-def setlonlat(df1):
-
-    df1['lat'] = [float(re.findall(r'[-?\d\.\d]+', a)[0])
-                  for a in df1['lonlat']]
-    df1['lon'] = [float(re.findall(r'[-?\d\.\d]+', a)[1])
-                  for a in df1['lonlat']]
+    
+def setlonlat(df):
+    df['lon'] = df.geometry.apply(lambda p: p.x)
+    df['lat'] = df.geometry.apply(lambda p: p.y)
 
 
 # df1['geom']=[creategeom(x) for x in df1['lonlat']]
@@ -196,8 +193,15 @@ def nearestdistances1(data_mandiri, data_bvt, distance):
 
         return df
 
-
+    
 def nearestdistances(data_mandiri, data_bvt, distance):
+    '''
+    df1=pd.read_excel("/Users/jenhar/Downloads/Data Structure & Dummy - Bank Mandiri.xlsx","new dummy")
+    df2=gpd.read_file('/Users/jenhar/Downloads/Mandiri Category Sample.geojson')
+    df1=df1.rename(columns={'longitude':'lon', 'latitude':'lat'})
+    df2=df2.rename(columns={'longitude':'lon', 'latitude':'lat'})
+    
+    '''
 
     df1 = data_mandiri.copy()
     df2 = data_bvt.copy()
@@ -236,20 +240,18 @@ def nearestdistances(data_mandiri, data_bvt, distance):
 
         # print(len(cate))
         if len(cate) == 0 or len(dos.columns) == 0:
+            
+
+            df = pd.concat(cates).reset_index(drop=True)
+            df1['index'] = df1.index
+
+            df = df1.merge(df[['poi_name', 'spatial_score', 'name']],
+                           how='left', left_on=df1['index'], right_on=df['name']).fillna(0)
+            # df=df.merge(df1, how='left', left_on='name', right_on=df1.index)
+
+            return df
+        
             break
 
-        df = pd.concat(cates).reset_index(drop=True)
-        df1['index'] = df1.index
-
-        df = df1.merge(df[['poi_name', 'spatial_score', 'name']],
-                       how='left', left_on=df1['index'], right_on=df['name']).fillna(0)
-        # df=df.merge(df1, how='left', left_on='name', right_on=df1.index)
-
-        return df
 
 
-# df1=pd.read_excel("/Users/jenhar/Downloads/Data Structure & Dummy - Bank Mandiri.xlsx","new dummy")
-# df2=gpd.read_file('/Users/jenhar/Downloads/Mandiri Category Sample.geojson')
-
-# df1=df1.rename(columns={'longitude':'lon', 'latitude':'lat'})
-# df2=df2.rename(columns={'longitude':'lon', 'latitude':'lat'})
